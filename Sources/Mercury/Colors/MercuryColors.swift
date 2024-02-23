@@ -3,16 +3,14 @@
 //  
 //
 //  Created by Satheesh on 22/02/24.
-//
+// Courtesy: https://github.com/Decathlon/vitamin-ios 
 
 import SwiftUI
 import Foundation
 import UIKit.UIColor
-// swiftlint:disable superfluous_disable_command file_length implicit_return
 
 // MARK: - Colors
 
-// swiftlint:disable identifier_name line_length type_body_length
 public struct MercuryColor {
   public let rgbaValue: UInt32
   public var color: UIColor { return UIColor(named: self) }
@@ -24,7 +22,6 @@ public struct MercuryColor {
     public static let x25292d = MercuryColor(rgbaValue: 0x25292d)
   }
 }
-// swiftlint:enable identifier_name line_length type_body_length
 
 // MARK: - Implementation Details
 
