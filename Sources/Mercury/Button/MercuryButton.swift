@@ -13,8 +13,8 @@ struct MercuryPrimaryButtonModifier: ViewModifier {
         content
             .frame(maxWidth: .infinity)
             .padding([.top, .bottom], 10)
-            .foregroundColor(MercuryColor.Base.x25292d.swiftUIColor)
-            .background(MercuryColor.Base.xfdb426.swiftUIColor)
+            .foregroundColor(MercuryColor.primaryForeground.swiftUIColor)
+            .background(MercuryColor.primaryBackground.swiftUIColor)
             .cornerRadius(44)
     }
 }
@@ -24,8 +24,8 @@ struct MercurySecondaryButtonModifier: ViewModifier {
         content
             .frame(maxWidth: .infinity)
             .padding([.top, .bottom], 10)
-            .foregroundColor(MercuryColor.Base.xfcfcfc.swiftUIColor)
-            .background(MercuryColor.Base.x25292d.swiftUIColor)
+            .foregroundColor(MercuryColor.secondaryForeground.swiftUIColor)
+            .background(MercuryColor.secondaryBackground.swiftUIColor)
             .cornerRadius(44)
     }
 }

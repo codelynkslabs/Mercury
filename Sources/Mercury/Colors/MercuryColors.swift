@@ -12,15 +12,13 @@ import UIKit.UIColor
 // MARK: - Colors
 
 public struct MercuryColor {
-  public let hexValue: Int
-  public var color: UIColor { return UIColor(named: self) }
-
-  public enum Base {
-    public static let xfdb426 = MercuryColor(hexValue: 0xfdb426)
-    public static let xffffff = MercuryColor(hexValue: 0xffffff)
-    public static let xfcfcfc = MercuryColor(hexValue: 0xfcfcfc)
-    public static let x25292d = MercuryColor(hexValue: 0x25292d)
-  }
+    public let hexValue: Int
+    public var color: UIColor { return UIColor(named: self) }
+    
+    public static let primaryBackground = MercuryColor(hexValue: 0x355070)
+    public static let primaryForeground = MercuryColor(hexValue: 0xE56B6F)
+    public static let secondaryBackground = MercuryColor(hexValue: 0xB56576)
+    public static let secondaryForeground = MercuryColor(hexValue: 0x6D597A)
 }
 
 // MARK: - Implementation Details
@@ -30,9 +28,11 @@ internal extension UIColor {
         assert(red >= 0 && red <= 255, "Invalid red component")
         assert(green >= 0 && green <= 255, "Invalid green component")
         assert(blue >= 0 && blue <= 255, "Invalid blue component")
-
-        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0,
-                  blue: CGFloat(blue) / 255.0, alpha: 1.0)
+        
+        self.init(red: CGFloat(red) / 255.0,
+                  green: CGFloat(green) / 255.0,
+                  blue: CGFloat(blue) / 255.0,
+                  alpha: 1.0)
     }
 
     convenience init(hexValue: Int) {
@@ -45,9 +45,9 @@ internal extension UIColor {
 }
 
 public extension UIColor {
-  convenience init(named color: MercuryColor) {
-    self.init(hexValue: color.hexValue)
-  }
+    convenience init(named color: MercuryColor) {
+        self.init(hexValue: color.hexValue)
+    }
 }
 
 extension MercuryColor {
