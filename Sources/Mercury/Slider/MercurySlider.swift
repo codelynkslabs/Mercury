@@ -9,25 +9,29 @@ import Foundation
 import SwiftUI
 
 public struct MercuryConfig {
-    var primaryColor: Color
-    var secondaryColor: Color
+    var primaryText: String
+    var secondaryText1: String
+    var secondaryText2: String
     var primaryFont: MercuryFont
     var secondaryFont: MercuryFont
     
-    public init(primaryColor: Color, secondaryColor: Color,
+    public init(primaryText: String, secondaryText1: String, secondaryText2: String,
                 primaryFont: MercuryFont, secondaryFont: MercuryFont) {
-        self.primaryColor = primaryColor
-        self.secondaryColor = secondaryColor
+        self.primaryText = primaryText
+        self.secondaryText1 = secondaryText1
+        self.secondaryText2 = secondaryText2
         self.primaryFont = primaryFont
         self.secondaryFont = secondaryFont
     }
 }
 
 public struct MercuryFont {
+    var color: Color
     var name: String
     var size: CGFloat
     
-    public init(name: String, size: CGFloat) {
+    public init(color: Color,name: String, size: CGFloat) {
+        self.color = color
         self.name = name
         self.size = size
     }
@@ -35,39 +39,37 @@ public struct MercuryFont {
 
 public struct MercurySlider: View {
     @Binding var progressValue: Float
-    var text: String
-    var mercurySliderDraggingEnded: (() -> Void)
     var config: MercuryConfig
+    var mercurySliderDraggingEnded: (() -> Void)
     
-    public init(progressValue: Binding<Float>, text: String, config: MercuryConfig,
+    public init(progressValue: Binding<Float>, config: MercuryConfig,
                 mercurySliderDraggingEnded: @escaping (() -> Void)) {
         self._progressValue = progressValue
-        self.text = text
-        self.mercurySliderDraggingEnded = mercurySliderDraggingEnded
         self.config = config
+        self.mercurySliderDraggingEnded = mercurySliderDraggingEnded
     }
     
     public var body: some View {
         VStack {
-            Text(text)
+            Text(config.primaryText)
                 .font(.custom(config.primaryFont.name, size: config.primaryFont.size))
-                .foregroundColor(config.primaryColor)
+                .foregroundColor(config.primaryFont.color)
             HStack {
-                Text("Low")
+                Text(config.secondaryText1)
                     .font(.custom(config.secondaryFont.name, size: config.secondaryFont.size))
-                    .foregroundColor(config.secondaryColor)
+                    .foregroundColor(config.secondaryFont.color)
                     .padding(.leading, 16)
                 Spacer()
-                Text("High")
+                Text(config.secondaryText2)
                     .font(.custom(config.secondaryFont.name, size: config.secondaryFont.size))
-                    .foregroundColor(config.secondaryColor)
+                    .foregroundColor(config.secondaryFont.color)
                     .padding(.trailing, 16)
             }
-            Image("TopPrgressviewbg")
+            Image("topBackgroundSlider")
             MercuryProgressBar(progress: $progressValue, draggingEnded: {
                 mercurySliderDraggingEnded()
             })
-            Image("BottomProgressbg")
+            Image("bottomBackgroundSlider")
             Spacer()
         }.padding(.top, 16)
     }
@@ -90,7 +92,7 @@ struct MercuryProgressBar: View {
                 .frame(width: (UIScreen.main.bounds.width - 32) * CGFloat(progress), height: 10)
             
             // Thumb Image
-            Image("progressthumb")
+            Image("sliderThumb")
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 20, height: 20)
                 .padding(.top, 4)
