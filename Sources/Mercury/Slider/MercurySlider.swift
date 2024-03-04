@@ -10,16 +10,16 @@ import SwiftUI
 
 public struct MercuryConfig {
     var primaryText: String
-    var secondaryText1: String
-    var secondaryText2: String
+    var leftLabel: String
+    var rightLabel: String
     var primaryFont: MercuryFont
     var secondaryFont: MercuryFont
     
-    public init(primaryText: String, secondaryText1: String, secondaryText2: String,
+    public init(primaryText: String, leftLabel: String, rightLabel: String,
                 primaryFont: MercuryFont, secondaryFont: MercuryFont) {
         self.primaryText = primaryText
-        self.secondaryText1 = secondaryText1
-        self.secondaryText2 = secondaryText2
+        self.leftLabel = leftLabel
+        self.rightLabel = rightLabel
         self.primaryFont = primaryFont
         self.secondaryFont = secondaryFont
     }
@@ -55,12 +55,12 @@ public struct MercurySlider: View {
                 .font(.custom(config.primaryFont.name, size: config.primaryFont.size))
                 .foregroundColor(config.primaryFont.color)
             HStack {
-                Text(config.secondaryText1)
+                Text(config.leftLabel)
                     .font(.custom(config.secondaryFont.name, size: config.secondaryFont.size))
                     .foregroundColor(config.secondaryFont.color)
                     .padding(.leading, 16)
                 Spacer()
-                Text(config.secondaryText2)
+                Text(config.rightLabel)
                     .font(.custom(config.secondaryFont.name, size: config.secondaryFont.size))
                     .foregroundColor(config.secondaryFont.color)
                     .padding(.trailing, 16)
