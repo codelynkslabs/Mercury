@@ -15,10 +15,15 @@ public struct MercuryColor {
     public let hexValue: Int
     public var color: UIColor { return UIColor(named: self) }
     
+    //Button
     public static let primaryBackground = MercuryColor(hexValue: 0x355070)
     public static let primaryForeground = MercuryColor(hexValue: 0xE56B6F)
     public static let secondaryBackground = MercuryColor(hexValue: 0xB56576)
     public static let secondaryForeground = MercuryColor(hexValue: 0x6D597A)
+    
+    //Slider
+    public static let rectangle1 = MercuryColor(hexValue: 0x25292D)
+    public static let rectangle2 = MercuryColor(hexValue: 0x0496FF)
 }
 
 // MARK: - Implementation Details
