@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  MercurySearchBarView.swift
 //  
 //
 //  Created by Satheesh on 04/03/24.
@@ -8,16 +8,33 @@
 import Foundation
 import SwiftUI
 
+public struct MercurySearchBarConfig {
+    var placeholder: String
+    var backgroundColor: Color
+    var font: MercuryFont
+    
+    public init(placeholder: String,
+                backgroundColor: Color,
+                font: MercuryFont) {
+        self.placeholder = placeholder
+        self.backgroundColor = backgroundColor
+        self.font = font
+    }
+    
+    var fontName: Font {
+        return Font.custom(self.font.name, size: self.font.size)
+    }
+}
+
 struct MercurySearchBar: View {
     @Binding var text: String
     var config: MercurySearchBarConfig?
     var body: some View {
         HStack {
             Image("search_icon")
-            TextField(config?.searchBarPlaceholder ?? "", text: $text)
-                .foregroundColor(config?.searchBarFont.color)
-                .font(.custom(config?.searchBarFont.name ?? "",
-                              size: config?.searchBarFont.size ?? 14))
+            TextField(config?.placeholder ?? "", text: $text)
+                .foregroundColor(config?.font.color)
+                .font(config?.fontName)
             if !text.isEmpty {
                 Button(action: {
                     text = ""
@@ -29,7 +46,7 @@ struct MercurySearchBar: View {
             }
         }
         .padding(7)
-        .background(config?.searchBarBackgroundColor)
+        .background(config?.backgroundColor)
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }

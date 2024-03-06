@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  MercuryContentView.swift
 //  
 //
 //  Created by Satheesh on 04/03/24.
@@ -10,18 +10,17 @@ import SwiftUI
 
 struct MercuryContentView: View {
     @Binding var isPresentedPopUp: Bool
-    var items: [String]
-    var itemFont: MercuryFont
-    var itemsSubTitle: [String]?
-    var itemSubTileFont: MercuryFont?
-    var itemImages: [Image]?
-    var hasTwoLines: Bool = false
     @Binding var selected: Int
+    var titles: [String]
+    var primaryFont: MercuryFont
+    var subtitles: [String]?
+    var secondaryFont: MercuryFont?
+    var itemImages: [Image]?
     var onItemSelected: (() -> Void)? = nil
     
     var body: some View {
         VStack {
-            ForEach(Array(items.enumerated()), id: \.1) { (index, item) in
+            ForEach(Array(titles.enumerated()), id: \.1) { (index, item) in
                 VStack {
                     HStack {
                         if let image = itemImages?[index] {
@@ -30,13 +29,13 @@ struct MercuryContentView: View {
                         }
                         VStack(alignment: .leading){
                             Text(item)
-                                .font(.custom(itemFont.name, size: itemFont.size))
-                                .foregroundColor(itemFont.color)
+                                .font(.custom(primaryFont.name, size: primaryFont.size))
+                                .foregroundColor(primaryFont.color)
                                 .padding(0)
-                            if let subTitle = itemsSubTitle?[index] {
+                            if let subTitle = subtitles?[index] {
                                 Text(subTitle)
-                                    .font(.custom(itemSubTileFont?.name ?? "", size: itemSubTileFont?.size ?? 14))
-                                    .foregroundColor(itemSubTileFont?.color)
+                                    .font(.custom(secondaryFont?.name ?? "", size: secondaryFont?.size ?? 14))
+                                    .foregroundColor(secondaryFont?.color)
                                     .padding(.top, 3)
                             }
                         }
