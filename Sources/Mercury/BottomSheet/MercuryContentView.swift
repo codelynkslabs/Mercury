@@ -12,7 +12,7 @@ struct MercuryContentView: View {
     @Binding var isPresentedPopUp: Bool
     @Binding var selected: Int
     var titles: [String]
-    var primaryFont: MercuryFont
+    var primaryFont: MercuryFont?
     var subtitles: [String]?
     var secondaryFont: MercuryFont?
     var itemImages: [Image]?
@@ -29,12 +29,12 @@ struct MercuryContentView: View {
                         }
                         VStack(alignment: .leading){
                             Text(item)
-                                .font(.custom(primaryFont.name, size: primaryFont.size))
-                                .foregroundColor(primaryFont.color)
+                                .font(primaryFont?.font)
+                                .foregroundColor(primaryFont?.color)
                                 .padding(0)
                             if let subTitle = subtitles?[index] {
                                 Text(subTitle)
-                                    .font(.custom(secondaryFont?.name ?? "", size: secondaryFont?.size ?? 14))
+                                    .font(secondaryFont?.font)
                                     .foregroundColor(secondaryFont?.color)
                                     .padding(.top, 3)
                             }

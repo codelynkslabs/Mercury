@@ -8,62 +8,62 @@
 import Foundation
 import SwiftUI
 
+public enum MercuryBottomSheetType {
+    /// This will show the bottom sheet with a divider on top.
+    case `default`
+    /// This will show the bottom sheet with a search on top.
+    case withSearchbar(placeholder: String, color: Color, font: MercuryFont)
+    /// This will show the bottom sheet with a subtile view  on top.
+    case withSubtitle(title: String, font: MercuryFont)
+}
+
 public struct MercurySubtitleConfig {
-    var subTitle: String
-    var subTitleFont: MercuryFont
+    var text: String
+    var font: MercuryFont
     
-    public init(subTitle: String, subTitleFont: MercuryFont) {
-        self.subTitle = subTitle
-        self.subTitleFont = subTitleFont
-    }
-    
-    var font: Font {
-        return Font.custom(self.subTitleFont.name, size: self.subTitleFont.size)
+    public init(text: String, font: MercuryFont) {
+        self.text = text
+        self.font = font
     }
 }
 
 public struct MercuryBottomSheetConfig {
+    var titleFont: MercuryFont? = nil
+    var itemFont: MercuryFont? = nil
     var itemsSubTitle: [String]? = nil
     var itemSubtitleFont: MercuryFont? = nil
     var itemsImages: [Image]? = nil
-    var isSearchBarEnabled: Bool? = nil
-    var configSearchBar: MercurySearchBarConfig? = nil
-    var configSubtitleView: MercurySubtitleConfig? = nil
+    var sheetType: MercuryBottomSheetType = .default
     
-    public init(itemsSubTitle: [String]? = nil, itemSubtitleFont: MercuryFont? = nil,
-                itemsImages: [Image]? = nil, isSearchBarEnabled: Bool? = nil,
-                configSearchBar: MercurySearchBarConfig? = nil,
-                configSubtitleView: MercurySubtitleConfig? = nil) {
+    public init(titleFont: MercuryFont? = nil, itemFont: MercuryFont? = nil, itemsSubTitle: [String]? = nil,
+                itemSubtitleFont: MercuryFont? = nil, itemsImages: [Image]? = nil,
+                sheetType: MercuryBottomSheetType = .default) {
+        self.titleFont = titleFont
+        self.itemFont = itemFont
         self.itemsSubTitle = itemsSubTitle
         self.itemSubtitleFont = itemSubtitleFont
         self.itemsImages = itemsImages
-        self.isSearchBarEnabled = isSearchBarEnabled
-        self.configSearchBar = configSearchBar
-        self.configSubtitleView = configSubtitleView
+        self.sheetType = sheetType
     }
 }
 
 public struct MercuryBottomSheet: View {
-    @Binding var isPresentedPopUp: Bool
-    @Binding var selected: Int
+    @Binding var isPresented: Bool
+    @Binding var selectedIndex: Int
     @State private var searchFieldValue = ""
     let title: String
-    var titleFont: MercuryFont
     var items: [String]
-    var itemFont: MercuryFont
     var config: MercuryBottomSheetConfig? = nil
     var oncloseAction: ((Bool) -> Void)? = nil
     
-    public init(isPresentedPopUp: Binding<Bool>, selected: Binding<Int>,searchFieldValue: String = "",
-                title: String, titleFont: MercuryFont, items: [String], itemFont: MercuryFont,
-                config: MercuryBottomSheetConfig? = nil, oncloseAction: ((Bool) -> Void)? = nil) {
-        self._isPresentedPopUp = isPresentedPopUp
-        self._selected = selected
+    public init(isPresented: Binding<Bool>, selectedIndex: Binding<Int>, searchFieldValue: String = "",
+                title: String, items: [String], config: MercuryBottomSheetConfig? = nil,
+                oncloseAction: ((Bool) -> Void)? = nil) {
+        self._isPresented = isPresented
+        self._selectedIndex = selectedIndex
         self.searchFieldValue = searchFieldValue
         self.title = title
-        self.titleFont = titleFont
         self.items = items
-        self.itemFont = itemFont
         self.config = config
         self.oncloseAction = oncloseAction
     }
@@ -72,12 +72,12 @@ public struct MercuryBottomSheet: View {
         VStack {
             HStack {
                 Text(title)
-                    .font(.custom(titleFont.name, size: titleFont.size))
-                    .foregroundColor(titleFont.color)
+                    .font(config?.titleFont?.font)
+                    .foregroundColor(config?.titleFont?.color)
                     .padding(16)
                 Spacer()
                 Button {
-                    isPresentedPopUp = false
+                    isPresented = false
                     oncloseAction?(false)
                 }label: {
                     Image("Close")
@@ -85,21 +85,23 @@ public struct MercuryBottomSheet: View {
                 .padding(.trailing, 16)
             }
             
-            if let searchbarEnabled = config?.isSearchBarEnabled {
-                if searchbarEnabled {
-                    MercurySearchBar(text: $searchFieldValue,config: config?.configSearchBar)
-                } else {
-                    MercurySubTitleView(config: config?.configSubtitleView)
-                }
-            } else {
+            switch config?.sheetType {
+            case .default:
                 Divider()
                     .overlay(MercuryColor.rectangle1.swiftUIColor)
+            case .withSearchbar(let placeholder, let color, let font):
+                MercurySearchBar(text: $searchFieldValue, config: MercurySearchBarConfig(
+                    placeholder: placeholder, backgroundColor: color, font: font))
+            case .withSubtitle(let title, let font):
+                MercurySubTitleView(config: MercurySubtitleConfig(text: title, font: font))
+            case nil:
+                Divider()
             }
             
             MercuryContentView(
-                isPresentedPopUp: $isPresentedPopUp,
-                selected: $selected, titles: items,
-                primaryFont: itemFont,
+                isPresentedPopUp: $isPresented,
+                selected: $selectedIndex, titles: items,
+                primaryFont: config?.itemFont,
                 subtitles: config?.itemsSubTitle,
                 secondaryFont: config?.itemSubtitleFont,
                 itemImages: config?.itemsImages
@@ -108,8 +110,8 @@ public struct MercuryBottomSheet: View {
             }
             Spacer()
         }
-        .onChange(of: selected) { newValue in
-            isPresentedPopUp = false
+        .onChange(of: selectedIndex) { newValue in
+            isPresented = false
             oncloseAction?(true)
         }
     }
@@ -120,9 +122,9 @@ struct MercurySubTitleView: View {
     var body: some View {
         Divider()
         HStack {
-            Text(config?.subTitle ?? "").padding(.leading, 16)
-                .font(config?.font)
-                .foregroundColor(config?.subTitleFont.color)
+            Text(config?.text ?? "").padding(.leading, 16)
+                .font(config?.font.font)
+                .foregroundColor(config?.font.color)
                 .padding(.vertical, 10)
             Spacer()
         }

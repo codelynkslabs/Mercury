@@ -20,10 +20,6 @@ public struct MercurySearchBarConfig {
         self.backgroundColor = backgroundColor
         self.font = font
     }
-    
-    var fontName: Font {
-        return Font.custom(self.font.name, size: self.font.size)
-    }
 }
 
 struct MercurySearchBar: View {
@@ -34,7 +30,7 @@ struct MercurySearchBar: View {
             Image("search_icon")
             TextField(config?.placeholder ?? "", text: $text)
                 .foregroundColor(config?.font.color)
-                .font(config?.fontName)
+                .font(config?.font.font)
             if !text.isEmpty {
                 Button(action: {
                     text = ""

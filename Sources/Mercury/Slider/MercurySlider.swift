@@ -35,6 +35,10 @@ public struct MercuryFont {
         self.name = name
         self.size = size
     }
+    
+    var font: Font {
+        return Font.custom(self.name, size: self.size)
+    }
 }
 
 public struct MercurySlider: View {
